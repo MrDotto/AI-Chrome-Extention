@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Google Forms Extension",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab", "storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_start",
+      "matches": ["https://docs.google.com/forms/d/*"],
+      "js": ["content_script.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "AIAutoFill.html"
+  }
+}

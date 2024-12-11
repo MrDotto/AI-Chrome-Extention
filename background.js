@@ -1,3 +1,29 @@
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+    chrome.scripting.executeScript(
+        {
+            target: { tabId: details.tabId },
+            func: () => window.scriptInjected || false,
+        },
+        (results) => {
+            if (!results || !results[0]?.result) {
+                chrome.scripting.executeScript({
+                    target: { tabId: details.tabId },
+                    files: ['content_script.js'],
+                });
+
+                chrome.scripting.executeScript({
+                    target: { tabId: details.tabId },
+                    func: () => {
+                        window.scriptInjected = true;
+                    },
+                });
+            }
+        }
+    );
+
+    chrome.runtime.sendMessage({ action: "reset" });
+});
+
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     try {
         const apiResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -8,7 +34,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
             },
             method: "POST",
             body: JSON.stringify({
-                model: "mixtral-8x7b-32768",
+                model: "gemma2-9b-it",
                 messages: [
                     { role: "system", content: "Follow instructions perfectly." },
                     { role: "user", content: request.AIreq }

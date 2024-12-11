@@ -2,14 +2,14 @@
   "manifest_version": 3,
   "name": "Google Forms Extension",
   "version": "1.0",
-  "permissions": ["scripting", "activeTab", "storage", "tabs"],
+  "permissions": ["scripting", "activeTab", "storage", "tabs", "webNavigation"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "run_at": "document_start",
-      "matches": ["https://docs.google.com/forms/d/*"],
+      "matches": ["<all_urls>"],
       "js": ["content_script.js"]
     }
   ],
@@ -20,5 +20,8 @@
     "16": "extensionLogo.png",
     "48": "extensionLogo.png",
     "128": "extensionLogo.png"
-  }
+  },
+  "host_permissions": [
+    "<all_urls>"
+  ]
 }

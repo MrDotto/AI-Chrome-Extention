@@ -1,36 +1,10 @@
-chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-    chrome.scripting.executeScript(
-        {
-            target: { tabId: details.tabId },
-            func: () => window.scriptInjected || false,
-        },
-        (results) => {
-            if (!results || !results[0]?.result) {
-                chrome.scripting.executeScript({
-                    target: { tabId: details.tabId },
-                    files: ['content_script.js'],
-                });
-
-                chrome.scripting.executeScript({
-                    target: { tabId: details.tabId },
-                    func: () => {
-                        window.scriptInjected = true;
-                    },
-                });
-            }
-        }
-    );
-
-    chrome.runtime.sendMessage({ action: "reset" });
-});
-
 chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
     try {
         const apiResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             headers: {
                 "accept": "application/json",
                 "content-type": "application/json",
-                "authorization": "Bearer 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"
+                "authorization": "Bearer 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"
             },
             method: "POST",
             body: JSON.stringify({
